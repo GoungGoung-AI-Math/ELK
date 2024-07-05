@@ -2,7 +2,7 @@
 
 # Define variables
 EC2_USER=ec2-user
-EC2_IP=43.201.112.109
+EC2_IP=13.125.9.149
 PEM_PATH=~/Desktop/aikey.pem
 LOCAL_PATH=$(dirname "$0")
 REMOTE_PATH=/home/$EC2_USER/elk

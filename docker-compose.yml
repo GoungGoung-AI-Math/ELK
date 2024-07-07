@@ -1,45 +1,45 @@
 version: '3'
 
-services:  # 서비스를 정의하는 섹션
-  elasticsearch:  # Elasticsearch 서비스 정의
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.4  # 사용할 Elasticsearch 이미지
-    container_name: elasticsearch  # 컨테이너 이름 지정
-    environment:  # 환경 변수를 설정
-      - node.name=elasticsearch  # Elasticsearch 노드 이름
-      - cluster.name=docker-cluster  # 클러스터 이름
-      - discovery.type=single-node  # 단일 노드로 실행
-      - bootstrap.memory_lock=true  # 메모리 잠금 설정
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  # Elasticsearch에 할당할 메모리 크기 설정
-    ulimits:  # 시스템 자원 한계 설정
+services:
+  elasticsearch:
+    image: arm64v8/elasticsearch:7.13.4  # 사용할 Elasticsearch ARM64 이미지
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=docker-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
       memlock:
-        soft: -1  # 소프트 메모리 잠금 제한
-        hard: -1  # 하드 메모리 잠금 제한
-    volumes:  # 볼륨 설정
-      - esdata:/usr/share/elasticsearch/data  # Elasticsearch 데이터 디렉토리 마운트
-    ports:  # 포트 매핑 설정
-      - 9200:9200  # 호스트의 9200 포트를 컨테이너의 9200 포트에 매핑
-      - 9300:9300  # 호스트의 9300 포트를 컨테이너의 9300 포트에 매핑
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
 
-  logstash:  # Logstash 서비스 정의
-    image: docker.elastic.co/logstash/logstash:7.13.4  # 사용할 Logstash 이미지
-    container_name: logstash  # 컨테이너 이름 지정
-    ports:  # 포트 매핑 설정
-      - 5010:5010  # 호스트의 5010 포트를 컨테이너의 5010 포트에 매핑
-      - 5044:5044  # 호스트의 5044 포트를 컨테이너의 5044 포트에 매핑
-      - 9600:9600  # 호스트의 9600 포트를 컨테이너의 9600 포트에 매핑
-    volumes:  # 볼륨 설정
-      - ./logstash/pipeline:/usr/share/logstash/pipeline  # Logstash 파이프라인 디렉토리 마운트
-    environment:  # 환경 변수를 설정
-      - LS_JAVA_OPTS=-Xms256m -Xmx256m  # Logstash에 할당할 메모리 크기 설정
+  logstash:
+    image: arm64v8/logstash:7.13.4  # 사용할 Logstash ARM64 이미지
+    container_name: logstash
+    ports:
+      - 5010:5010
+      - 5044:5044
+      - 9600:9600
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    environment:
+      - LS_JAVA_OPTS=-Xms256m -Xmx256m
 
-  kibana:  # Kibana 서비스 정의
-    image: docker.elastic.co/kibana/kibana:7.13.4  # 사용할 Kibana 이미지
-    container_name: kibana  # 컨테이너 이름 지정
-    ports:  # 포트 매핑 설정
-      - 5601:5601  # 호스트의 5601 포트를 컨테이너의 5601 포트에 매핑
-    environment:  # 환경 변수를 설정
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200  # Kibana가 연결할 Elasticsearch 호스트 설정
+  kibana:
+    image: arm64v8/kibana:7.13.4  # 사용할 Kibana ARM64 이미지
+    container_name: kibana
+    ports:
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
 
-volumes:  # 볼륨 정의 섹션
-  esdata:  # esdata라는 이름의 볼륨 정의
-    driver: local  # 로컬 드라이버 사용
+volumes:
+  esdata:
+    driver: local
